@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { searchServices } = require("../controllers/searchController");
+const { searchServices } = require("../controllers/SearchController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // 🔐 Protected Route

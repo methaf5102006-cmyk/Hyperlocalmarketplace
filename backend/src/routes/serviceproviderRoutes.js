@@ -7,7 +7,7 @@ const {
   getProviderById,
   updateProvider,
   deleteProvider,
-} = require("../controllers/serviceproviderController");
+} = require("../controllers/ServiceproviderController");
 
 // ================= ROUTES =================
 router.post("/", createProvider);
