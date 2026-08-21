@@ -137,11 +137,11 @@ app.use(express.urlencoded({ extended: true }));
 // ================= ROUTES =================
 app.use("/api/auth", require("./src/routes/AuthRoutes"));
 app.use("/api/users", require("./src/routes/UserRoutes"));
-app.use("/api/providers", require("./src/routes/ServiceProviderRoutes"));
+app.use("/api/providers", require("./src/routes/serviceproviderRoutes"));
 app.use("/api/bookings", require("./src/routes/BookingRoutes"));
 app.use("/api/messages", require("./src/routes/MessageRoutes"));
-app.use("/api/admin", require("./src/routes/adminRoutes"));
-app.use("/api/notifications", require("./src/routes/notificationRoutes"));
+app.use("/api/admin", require("./src/routes/AdminRoutes"));
+app.use("/api/notifications", require("./src/routes/NotificationRoutes"));
 
 // ================= HEALTH CHECK =================
 app.get("/", (req, res) => {
