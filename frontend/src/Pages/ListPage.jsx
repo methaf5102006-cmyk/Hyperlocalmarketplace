@@ -1,5 +1,5 @@
 import React from "react";
-import services from "../data/services";
+import services from "../data/Services";
 import { useNavigate } from "react-router-dom";
 
 const ListPage = () => {

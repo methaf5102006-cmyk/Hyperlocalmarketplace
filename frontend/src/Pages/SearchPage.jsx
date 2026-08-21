@@ -1,6 +1,6 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import services from "../data/services";
+import services from "../data/Services";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
