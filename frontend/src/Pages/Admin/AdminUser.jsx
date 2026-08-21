@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
+import { BASE_URL } from "../../config";
 
 const AdminUsers = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const AdminUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/users");
+        const res = await axios.get(`${BASE_URL}/api/users`);
         setUsers(res.data);
       } catch (err) {
         console.log(err.message);
@@ -27,7 +28,7 @@ const AdminUsers = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      await axios.delete(`${BASE_URL}/api/users/${id}`);
       setUsers(users.filter((u) => u._id !== id));
     } catch (err) {
       console.log(err.message);
@@ -55,3 +56,4 @@ const AdminUsers = () => {
 };
 
 export default AdminUsers;
+

@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+﻿import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
-// ✅ FIX: Create socket ONCE outside component so it never gets killed on re-render
-const socket = io("http://localhost:5000", {
+// âœ… FIX: Create socket ONCE outside component so it never gets killed on re-render
+const socket = io(`${BASE_URL}`, {
   transports: ["websocket"],
   autoConnect: true,
   reconnection: true,
@@ -25,7 +26,7 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/messages/${roomId}`
+          `${BASE_URL}/api/messages/${roomId}`
         );
         setMessages(res.data || []);
       } catch (err) {
@@ -86,7 +87,7 @@ const Chat = () => {
     };
     socket.on("messageDelivered", handleDelivered);
 
-    // ✅ FIX: Only remove listeners — NEVER disconnect
+    // âœ… FIX: Only remove listeners â€” NEVER disconnect
     return () => {
       socket.off("connect", joinRoom);
       socket.off("receiveMessage", handleMessage);
@@ -153,10 +154,10 @@ const Chat = () => {
                 {isMe && (
                   <div className="text-xs mt-1 opacity-70">
                     {msg.status === "seen"
-                      ? "✓✓ Seen"
+                      ? "âœ“âœ“ Seen"
                       : msg.status === "delivered"
-                      ? "✓ Delivered"
-                      : "✓ Sent"}
+                      ? "âœ“ Delivered"
+                      : "âœ“ Sent"}
                   </div>
                 )}
               </div>
@@ -192,3 +193,4 @@ const Chat = () => {
 };
 
 export default Chat;
+

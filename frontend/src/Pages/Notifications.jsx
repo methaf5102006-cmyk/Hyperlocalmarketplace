@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -10,12 +11,12 @@ const Notifications = () => {
   const userId = user?._id || user?.id;
   const role = user?.role;
 
-  // ✅ FETCH NOTIFICATIONS (UPDATED LOGIC)
+  // âœ… FETCH NOTIFICATIONS (UPDATED LOGIC)
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/notifications/${userId}`,
+          `${BASE_URL}/api/notifications/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -69,3 +70,4 @@ const Notifications = () => {
 };
 
 export default Notifications;
+

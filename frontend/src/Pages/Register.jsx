@@ -1,8 +1,9 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
+import { BASE_URL } from "../config";
   Mail,
   Lock,
   User,
@@ -43,7 +44,7 @@ const Register = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${BASE_URL}/api/auth/register`,
         form
       );
 
@@ -51,7 +52,7 @@ const Register = () => {
         res.data.message || "Account created successfully"
       );
 
-      // ✅ CHANGED: redirect to verify-otp page with email
+      // âœ… CHANGED: redirect to verify-otp page with email
       setTimeout(() => {
         navigate("/verify-otp", {
           state: { email: form.email },
@@ -62,11 +63,11 @@ const Register = () => {
       console.log("REGISTER ERROR:", err.response?.data || err.message);
 
       if (err.response) {
-        setMessage(err.response.data.message || "Server Error ❌");
+        setMessage(err.response.data.message || "Server Error âŒ");
       } else if (err.request) {
-        setMessage("Cannot connect to backend server ❌");
+        setMessage("Cannot connect to backend server âŒ");
       } else {
-        setMessage(err.message || "Something went wrong ❌");
+        setMessage(err.message || "Something went wrong âŒ");
       }
     }
 
@@ -200,3 +201,4 @@ const Register = () => {
 };
 
 export default Register;
+

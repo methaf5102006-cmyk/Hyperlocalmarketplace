@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Save } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 const Profile = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/providers/${id}`
+          `${BASE_URL}/api/providers/${id}`
         );
         setProfile(res.data);
       } catch (error) {
@@ -37,11 +38,11 @@ const Profile = () => {
   const saveProfile = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/providers/${id}`,
+        `${BASE_URL}/api/providers/${id}`,
         profile
       );
 
-      // ✅ FIX: update localStorage so dashboard reflects changes
+      // âœ… FIX: update localStorage so dashboard reflects changes
       const storedUser = JSON.parse(localStorage.getItem("user"));
 
       if (storedUser && storedUser._id === res.data.userId) {
@@ -54,11 +55,11 @@ const Profile = () => {
         localStorage.setItem("user", JSON.stringify(updatedUser));
       }
 
-      alert("Profile saved ✅");
+      alert("Profile saved âœ…");
       navigate(-1);
     } catch (err) {
       console.log(err.message);
-      alert("Failed to save ❌");
+      alert("Failed to save âŒ");
     }
   };
 
@@ -220,3 +221,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

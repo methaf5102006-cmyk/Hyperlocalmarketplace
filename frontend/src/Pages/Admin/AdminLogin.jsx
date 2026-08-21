@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Shield, Lock } from "lucide-react";
 import axios from "axios";
+import { BASE_URL } from "../../config";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const AdminLogin = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/admin/login",
+        `${BASE_URL}/api/admin/login`,
         { email, password }
       );
 
@@ -27,7 +28,7 @@ const AdminLogin = () => {
         return;
       }
 
-      // ✅ FIX: SAME FORMAT AS NORMAL LOGIN
+      // âœ… FIX: SAME FORMAT AS NORMAL LOGIN
       const adminUser = {
         ...data.admin,
         role: "admin",
@@ -92,3 +93,4 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
 
 const AdminProviders = () => {
   const navigate = useNavigate();
@@ -14,14 +15,14 @@ const AdminProviders = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios.get("http://localhost:5000/api/providers");
+      const res = await axios.get(`${BASE_URL}/api/providers`);
       setProviders(res.data);
     };
     fetch();
   }, []);
 
   const approve = async (id) => {
-    await axios.put(`http://localhost:5000/api/providers/approve/${id}`);
+    await axios.put(`${BASE_URL}/api/providers/approve/${id}`);
   };
 
   return (
@@ -45,3 +46,4 @@ const AdminProviders = () => {
 };
 
 export default AdminProviders;
+

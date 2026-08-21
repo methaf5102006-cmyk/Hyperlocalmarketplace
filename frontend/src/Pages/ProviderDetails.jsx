@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 const ProviderDetails = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const ProviderDetails = () => {
     const fetchProvider = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/providers/${id}`
+          `${BASE_URL}/api/providers/${id}`
         );
 
         setProvider(res.data);
@@ -38,7 +39,7 @@ const ProviderDetails = () => {
         return;
       }
 
-      // 🔴 ONLY FIX ADDED (ROLE CHECK)
+      // ðŸ”´ ONLY FIX ADDED (ROLE CHECK)
       if (user?.role !== "customer") {
         alert("Only customers can hire providers");
         return;
@@ -52,7 +53,7 @@ const ProviderDetails = () => {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:5000/api/bookings",
+        `${BASE_URL}/api/bookings`,
         {
           userId: user._id,
           providerId: provider?._id,
@@ -64,11 +65,11 @@ const ProviderDetails = () => {
         }
       );
 
-      alert("Booking created successfully ✅");
+      alert("Booking created successfully âœ…");
       navigate("/dashboard");
     } catch (err) {
       console.log("BOOKING ERROR:", err.response?.data || err.message);
-      alert("Booking failed ❌");
+      alert("Booking failed âŒ");
     } finally {
       setLoading(false);
     }
@@ -103,7 +104,7 @@ const ProviderDetails = () => {
           </p>
 
           <p className="mt-5 text-gray-300">
-            📍 {provider?.location}
+            ðŸ“ {provider?.location}
           </p>
 
           <p className="mt-3 text-green-400 text-2xl font-bold">
@@ -126,3 +127,4 @@ const ProviderDetails = () => {
 };
 
 export default ProviderDetails;
+

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../config";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -13,7 +14,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/users", {
+      const res = await axios.get(`${BASE_URL}/api/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data || []);
@@ -24,7 +25,7 @@ const AdminDashboard = () => {
 
   const fetchProviders = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/providers", {
+      const res = await axios.get(`${BASE_URL}/api/providers`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProviders(res.data || []);
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/bookings/all", {
+      const res = await axios.get(`${BASE_URL}/api/bookings/all`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(res.data || []);
@@ -52,7 +53,7 @@ const AdminDashboard = () => {
 
   const deleteUser = async (id) => {
     if (!window.confirm("Delete this user?")) return;
-    await axios.delete(`http://localhost:5000/api/users/${id}`, {
+    await axios.delete(`${BASE_URL}/api/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     fetchUsers();
@@ -60,7 +61,7 @@ const AdminDashboard = () => {
 
   const deleteProvider = async (id) => {
     if (!window.confirm("Delete this provider?")) return;
-    await axios.delete(`http://localhost:5000/api/providers/${id}`, {
+    await axios.delete(`${BASE_URL}/api/providers/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     fetchProviders();
@@ -116,10 +117,10 @@ const AdminDashboard = () => {
                   : "hover:bg-slate-800"
               }`}
             >
-              {tab === "dashboard" && "📊"}
-              {tab === "users" && "👥"}
-              {tab === "providers" && "🔧"}
-              {tab === "bookings" && "📅"}{" "}
+              {tab === "dashboard" && "ðŸ“Š"}
+              {tab === "users" && "ðŸ‘¥"}
+              {tab === "providers" && "ðŸ”§"}
+              {tab === "bookings" && "ðŸ“…"}{" "}
               {tab}
             </button>
           ))}
@@ -134,7 +135,7 @@ const AdminDashboard = () => {
           <div className="mb-6">
             <input
               type="text"
-              placeholder="🔍 Search..."
+              placeholder="ðŸ” Search..."
               className="w-full p-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -293,3 +294,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

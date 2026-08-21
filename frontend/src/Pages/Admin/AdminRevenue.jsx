@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
 
 const AdminRevenue = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const AdminRevenue = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios.get("http://localhost:5000/api/bookings");
+      const res = await axios.get(`${BASE_URL}/api/bookings`);
       setBookings(res.data);
     };
     fetch();
@@ -31,3 +32,4 @@ const AdminRevenue = () => {
 };
 
 export default AdminRevenue;
+

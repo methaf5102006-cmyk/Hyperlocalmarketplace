@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 const ServiceProviders = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const ServiceProviders = () => {
   useEffect(() => {
     const fetchProviders = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/providers");
+        const res = await fetch(`${BASE_URL}/api/providers`);
         const data = await res.json();
         setProviders(data);
       } catch (err) {
@@ -63,7 +64,7 @@ const ServiceProviders = () => {
                     <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition duration-300 overflow-hidden ${isElectrician ? "bg-blue-900" : "bg-green-900"}`}>
                       {provider.image ? (
                         <img
-                          src={`http://localhost:5000${provider.image}`}
+                          src={`${BASE_URL}${provider.image}`}
                           alt={provider.name}
                           className="w-20 h-20 object-cover rounded-full"
                         />
@@ -86,15 +87,15 @@ const ServiceProviders = () => {
                       {provider.service}
                     </div>
 
-                    <p className="text-gray-400 text-sm mb-1">📍 {provider.location}</p>
+                    <p className="text-gray-400 text-sm mb-1">ðŸ“ {provider.location}</p>
                     <p className="text-gray-300 text-sm font-semibold mb-2">Rs. {provider.price} / visit</p>
 
                     <div className="flex items-center justify-center gap-1 mb-2">
-                      <span className="text-yellow-400 font-black text-sm">★ {provider.rating}</span>
+                      <span className="text-yellow-400 font-black text-sm">â˜… {provider.rating}</span>
                     </div>
 
                     <p className={`text-xs font-semibold mb-5 ${provider.isAvailable ? "text-green-400" : "text-red-400"}`}>
-                      {provider.isAvailable ? "✔ Available" : "✘ Not Available"}
+                      {provider.isAvailable ? "âœ” Available" : "âœ˜ Not Available"}
                     </p>
 
                     <button
@@ -117,3 +118,4 @@ const ServiceProviders = () => {
 };
 
 export default ServiceProviders;
+

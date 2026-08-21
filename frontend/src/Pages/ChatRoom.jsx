@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+﻿import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
-// ✅ FIX: Create socket ONCE outside component so it never gets killed on re-render
-const socket = io("http://localhost:5000", {
+// âœ… FIX: Create socket ONCE outside component so it never gets killed on re-render
+const socket = io(`${BASE_URL}`, {
   transports: ["websocket"],
   autoConnect: true,
   reconnection: true,
@@ -26,7 +27,7 @@ const ChatRoom = () => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/messages/${roomId}`
+          `${BASE_URL}/api/messages/${roomId}`
         );
         setMessages(res.data);
       } catch (err) {
@@ -44,7 +45,7 @@ const ChatRoom = () => {
     // ================= JOIN ROOM =================
     const joinRoom = () => {
       socket.emit("joinRoom", roomId);
-      console.log("✅ Joined room:", roomId);
+      console.log("âœ… Joined room:", roomId);
     };
 
     socket.on("connect", joinRoom);
@@ -66,7 +67,7 @@ const ChatRoom = () => {
 
     socket.on("receiveMessage", handleMessage);
 
-    // ✅ FIX: Only remove listeners on cleanup — NEVER disconnect
+    // âœ… FIX: Only remove listeners on cleanup â€” NEVER disconnect
     // Disconnecting caused "WebSocket closed before connection established"
     return () => {
       socket.off("connect", joinRoom);
@@ -89,7 +90,7 @@ const ChatRoom = () => {
       message,
     };
 
-    // ✅ FIX: Only emit — server broadcasts back to room including sender
+    // âœ… FIX: Only emit â€” server broadcasts back to room including sender
     socket.emit("sendMessage", msgData);
 
     setMessage("");
@@ -184,3 +185,4 @@ const styles = {
     cursor: "pointer",
   },
 };
+

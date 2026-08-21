@@ -1,7 +1,8 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ShieldCheck, ArrowRight, KeyRound } from "lucide-react";
+import { BASE_URL } from "../config";
 
 const VerifyOtp = () => {
   const navigate = useNavigate();
@@ -20,11 +21,11 @@ const VerifyOtp = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp",
+        `${BASE_URL}/api/auth/verify-otp`,
         { email, otp }
       );
 
-      setMessage(res.data.message || "Email verified ✅");
+      setMessage(res.data.message || "Email verified âœ…");
 
       setTimeout(() => {
         navigate("/login");
@@ -32,7 +33,7 @@ const VerifyOtp = () => {
 
     } catch (err) {
       console.log("OTP ERROR:", err.response?.data || err.message);
-      setMessage(err.response?.data?.message || "OTP verification failed ❌");
+      setMessage(err.response?.data?.message || "OTP verification failed âŒ");
     }
 
     setLoading(false);
@@ -124,3 +125,4 @@ const VerifyOtp = () => {
 };
 
 export default VerifyOtp;
+

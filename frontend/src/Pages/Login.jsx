@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { ArrowRight, ShieldCheck } from "lucide-react";
+import { BASE_URL } from "../config";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -15,14 +16,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // ✅ DEBUG (IMPORTANT)
+      // âœ… DEBUG (IMPORTANT)
       console.log("LOGIN PAYLOAD:", {
         email,
         password,
       });
 
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${BASE_URL}/api/auth/login`,
         {
           email: email.trim(),
           password: password.trim(),
@@ -34,7 +35,7 @@ const Login = () => {
       const user = res.data.user;
 
       if (!user || !user.role) {
-        alert("Invalid response from server ❌");
+        alert("Invalid response from server âŒ");
         return;
       }
 
@@ -86,7 +87,7 @@ const Login = () => {
 
       alert(
         err.response?.data?.message ||
-          "Login failed ❌"
+          "Login failed âŒ"
       );
     } finally {
       setLoading(false);
@@ -152,7 +153,7 @@ const Login = () => {
         </form>
 
         <p className="text-center text-gray-300 mt-4">
-          Don’t have account?{" "}
+          Donâ€™t have account?{" "}
           <Link
             to="/register"
             className="text-blue-400 hover:text-blue-300"
@@ -166,3 +167,4 @@ const Login = () => {
 };
 
 export default Login;
+

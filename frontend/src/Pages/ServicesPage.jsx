@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import {
+import { BASE_URL } from "../config";
   Search,
   MapPin,
   Star,
@@ -25,7 +26,7 @@ const ServicesPage = () => {
     const fetchProviders = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/providers",
+          `${BASE_URL}/api/providers`,
           {
             params: {
               service: search,
@@ -233,3 +234,4 @@ const ServicesPage = () => {
 };
 
 export default ServicesPage;
+

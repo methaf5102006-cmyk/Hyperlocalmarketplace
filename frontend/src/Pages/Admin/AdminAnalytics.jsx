@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../config";
 
 const AdminAnalytics = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const AdminAnalytics = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await axios.get("http://localhost:5000/api/users");
+      const res = await axios.get(`${BASE_URL}/api/users`);
       setUsers(res.data.length);
     };
     fetch();
@@ -29,3 +30,4 @@ const AdminAnalytics = () => {
 };
 
 export default AdminAnalytics;
+

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import "leaflet/dist/leaflet.css"; // ✅ ADDED
+import "leaflet/dist/leaflet.css"; // âœ… ADDED
+import { BASE_URL } from "../config";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -45,7 +46,7 @@ const ProviderDashboard = () => {
     const loadProvider = async () => {
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:5000/api/providers");
+        const res = await axios.get(`${BASE_URL}/api/providers`);
         const me = res.data.find(
           (p) => String(p?.userId?._id || p?.userId) === String(userId)
         );
@@ -67,7 +68,7 @@ const ProviderDashboard = () => {
       if (!providerId) return;
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/bookings/provider/${providerId}`,
+          `${BASE_URL}/api/bookings/provider/${providerId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setRequests(res.data || []);
@@ -92,7 +93,7 @@ const ProviderDashboard = () => {
     e.stopPropagation();
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/bookings/${id}`,
+        `${BASE_URL}/api/bookings/${id}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -101,7 +102,7 @@ const ProviderDashboard = () => {
       );
     } catch (err) {
       console.log(err.message);
-      alert("Failed to update status ❌");
+      alert("Failed to update status âŒ");
     }
   };
 
@@ -109,7 +110,7 @@ const ProviderDashboard = () => {
   const openChat = (e, customerId) => {
     e.stopPropagation();
     if (!customerId || !providerProfile) {
-      alert("Chat unavailable ❌");
+      alert("Chat unavailable âŒ");
       return;
     }
     const provId = String(providerProfile?.userId?._id || providerProfile?.userId);
@@ -139,7 +140,7 @@ const ProviderDashboard = () => {
   if (id) {
     navigate(`/profile/${id}`);
   } else {
-    alert("Profile not found ❌");
+    alert("Profile not found âŒ");
   }
 };
   // ================= DELETE PROFILE =================
@@ -147,14 +148,14 @@ const ProviderDashboard = () => {
     if (!window.confirm("Are you sure you want to delete your profile?")) return;
     try {
       await axios.delete(
-        `http://localhost:5000/api/providers/${providerId}`,
+        `${BASE_URL}/api/providers/${providerId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       navigate("/register");
     } catch (err) {
-      alert("Failed to delete profile ❌");
+      alert("Failed to delete profile âŒ");
     }
   };
 
@@ -226,7 +227,7 @@ const ProviderDashboard = () => {
                   : "text-gray-500 hover:bg-white/60"
               }`}
             >
-              <span className="text-lg">👤</span> Dashboard
+              <span className="text-lg">ðŸ‘¤</span> Dashboard
             </button>
 
             <button
@@ -237,7 +238,7 @@ const ProviderDashboard = () => {
                   : "text-gray-500 hover:bg-white/60"
               }`}
             >
-              <span className="text-lg">✉️</span> Notifications
+              <span className="text-lg">âœ‰ï¸</span> Notifications
               {notifications.length > 0 && (
                 <span className="ml-auto bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">
                   {notifications.length}
@@ -253,7 +254,7 @@ const ProviderDashboard = () => {
                   : "text-gray-500 hover:bg-white/60"
               }`}
             >
-              <span className="text-lg">📋</span> Requests
+              <span className="text-lg">ðŸ“‹</span> Requests
               {stats.pending > 0 && (
                 <span className="ml-auto bg-yellow-500 text-white text-xs px-2 py-0.5 rounded-full">
                   {stats.pending}
@@ -308,7 +309,7 @@ const ProviderDashboard = () => {
                   <div>
                     <label className="text-xs text-gray-400">Name</label>
                     <p className="text-gray-800 font-medium mt-1 border-b pb-1">
-                      {providerProfile?.name || "—"}
+                      {providerProfile?.name || "â€”"}
                     </p>
                   </div>
                   <div>
@@ -320,13 +321,13 @@ const ProviderDashboard = () => {
                   <div>
                     <label className="text-xs text-gray-400">Email</label>
                     <p className="text-gray-800 font-medium mt-1 border-b pb-1">
-                      {providerProfile?.userId?.email || "—"}
+                      {providerProfile?.userId?.email || "â€”"}
                     </p>
                   </div>
                   <div>
                     <label className="text-xs text-gray-400">Role</label>
                     <p className="text-gray-800 font-medium mt-1 border-b pb-1 capitalize">
-                      {providerProfile?.service || "—"}
+                      {providerProfile?.service || "â€”"}
                     </p>
                   </div>
                 </div>
@@ -370,7 +371,7 @@ const ProviderDashboard = () => {
                   <div className="flex justify-between bg-gray-50 p-3 rounded-xl">
                     <span className="text-gray-500 text-sm">Service</span>
                     <span className="font-semibold capitalize text-gray-800">
-                      {providerProfile?.service || "—"}
+                      {providerProfile?.service || "â€”"}
                     </span>
                   </div>
                   <div className="flex justify-between bg-gray-50 p-3 rounded-xl">
@@ -382,7 +383,7 @@ const ProviderDashboard = () => {
                   <div className="flex justify-between bg-gray-50 p-3 rounded-xl">
                     <span className="text-gray-500 text-sm">Rating</span>
                     <span className="font-semibold text-gray-800">
-                      ⭐ {providerProfile?.rating || "0"}
+                      â­ {providerProfile?.rating || "0"}
                     </span>
                   </div>
                   <div className="flex justify-between bg-gray-50 p-3 rounded-xl">
@@ -394,7 +395,7 @@ const ProviderDashboard = () => {
                           : "text-red-500"
                       }`}
                     >
-                      {providerProfile?.isAvailable ? "Yes ✅" : "No ❌"}
+                      {providerProfile?.isAvailable ? "Yes âœ…" : "No âŒ"}
                     </span>
                   </div>
                 </div>
@@ -535,12 +536,12 @@ const ProviderDashboard = () => {
                       </div>
 
                       <p className="text-gray-500 text-sm mt-1">
-                        👤 {r.userId?.name || "Customer"}
+                        ðŸ‘¤ {r.userId?.name || "Customer"}
                       </p>
 
                       {r.location && (
                         <p className="text-gray-400 text-xs mt-1">
-                          📍 {r.location}
+                          ðŸ“ {r.location}
                         </p>
                       )}
 
@@ -597,3 +598,4 @@ const ProviderDashboard = () => {
 };
 
 export default ProviderDashboard;
+

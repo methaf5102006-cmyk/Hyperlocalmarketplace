@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../config";
 
 const CustomerProfile = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const CustomerProfile = () => {
   const saveProfile = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/users/${userId}`,
+        `${BASE_URL}/api/users/${userId}`,
         form,
         {
           headers: {
@@ -36,12 +37,12 @@ const CustomerProfile = () => {
       const updatedUser = { ...user, ...res.data.user };
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      alert("Profile saved successfully ✅");
+      alert("Profile saved successfully âœ…");
       navigate("/dashboard");
 
     } catch (err) {
       console.log(err.message);
-      alert("Failed to save ❌");
+      alert("Failed to save âŒ");
     }
   };
 
@@ -103,3 +104,4 @@ const CustomerProfile = () => {
 };
 
 export default CustomerProfile;
+

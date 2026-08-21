@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
+import { BASE_URL } from "../config";
 
 // ================= ICONS =================
 const defaultIcon = L.icon({ iconUrl, shadowUrl, iconSize: [25, 41] });
@@ -66,7 +67,7 @@ const Dashboard = () => {
     }
   }, []);
 
-  // ================= AUTO GPS ON LOAD ✅ =================
+  // ================= AUTO GPS ON LOAD âœ… =================
   useEffect(() => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(
@@ -82,12 +83,12 @@ const Dashboard = () => {
 
   // ================= FETCH PROVIDERS =================
   useEffect(() => {
-    axios.get("http://localhost:5000/api/providers")
+    axios.get(`${BASE_URL}/api/providers`)
       .then(res => setProviders(res.data || []))
       .catch(err => console.log(err.message));
   }, []);
 
-  // ================= GEOCODE PROVIDERS (text location → lat/lng) ✅ =================
+  // ================= GEOCODE PROVIDERS (text location â†’ lat/lng) âœ… =================
   useEffect(() => {
     if (providers.length === 0) return;
 
@@ -129,7 +130,7 @@ const Dashboard = () => {
   const fetchBookings = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/bookings/user/${userId}`,
+        `${BASE_URL}/api/bookings/user/${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setBookings(res.data || []);
@@ -145,7 +146,7 @@ const Dashboard = () => {
   // ================= FETCH NOTIFICATIONS =================
   useEffect(() => {
     if (!userId) return;
-    axios.get(`http://localhost:5000/api/notifications/${userId}`, {
+    axios.get(`${BASE_URL}/api/notifications/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => setNotifications(res.data || []))
@@ -154,21 +155,21 @@ const Dashboard = () => {
 
   // ================= REQUEST SERVICE =================
   const handleRequest = async (providerId) => {
-    if (!coords) { alert("Please pin your location on the map first 📍"); return; }
+    if (!coords) { alert("Please pin your location on the map first ðŸ“"); return; }
     setLoadingBooking(providerId);
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/bookings",
+        `${BASE_URL}/api/bookings`,
         { userId, providerId, location, coordinates: coords },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setBookings(prev => [res.data?.booking || res.data, ...prev]);
-      alert("Request sent successfully ✅");
+      alert("Request sent successfully âœ…");
       setLocation(""); setCoords(null);
       setActiveTab("history");
     } catch (err) {
       console.log(err.message);
-      alert("Request failed ❌");
+      alert("Request failed âŒ");
     } finally {
       setLoadingBooking(null);
     }
@@ -178,27 +179,27 @@ const Dashboard = () => {
   const submitFeedback = async (bookingId) => {
     const feedback = feedbackMap[bookingId];
     const rating = ratingMap[bookingId];
-    if (!feedback || !rating) { alert("Please add rating and feedback ⚠️"); return; }
+    if (!feedback || !rating) { alert("Please add rating and feedback âš ï¸"); return; }
     try {
       await axios.post(
-        `http://localhost:5000/api/bookings/${bookingId}/feedback`,
+        `${BASE_URL}/api/bookings/${bookingId}/feedback`,
         { feedback, rating },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      alert("Feedback submitted ✅");
+      alert("Feedback submitted âœ…");
       setFeedbackMap(prev => ({ ...prev, [bookingId]: "" }));
       setRatingMap(prev => ({ ...prev, [bookingId]: "" }));
       fetchBookings();
     } catch (err) {
       console.log(err.message);
-      alert("Feedback failed ❌");
+      alert("Feedback failed âŒ");
     }
   };
 
   // ================= OPEN CHAT =================
   const openChat = (booking) => {
     const providerId = booking?.providerId?._id || booking?.providerId;
-    if (!providerId) { alert("Chat unavailable ❌"); return; }
+    if (!providerId) { alert("Chat unavailable âŒ"); return; }
     const roomId = `${String(userId)}_${String(providerId)}`;
     navigate(`/chat/${roomId}`);
   };
@@ -207,13 +208,13 @@ const Dashboard = () => {
   const handleDeleteProfile = async () => {
     if (!window.confirm("Are you sure you want to delete your profile?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/users/${userId}`, {
+      await axios.delete(`${BASE_URL}/api/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       localStorage.clear();
       navigate("/register");
     } catch (err) {
-      alert("Delete failed ❌");
+      alert("Delete failed âŒ");
     }
   };
 
@@ -234,7 +235,7 @@ const Dashboard = () => {
         setCoords({ lat, lng });
         setLocation(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
       },
-      () => alert("Unable to fetch location ❌")
+      () => alert("Unable to fetch location âŒ")
     );
   };
 
@@ -288,10 +289,10 @@ const Dashboard = () => {
           {/* NAV */}
           <nav className="flex flex-col gap-2">
             {[
-              { key: "dashboard", label: "Dashboard", icon: "👤" },
-              { key: "find", label: "Find Experts", icon: "🔍" },
-              { key: "history", label: "My Requests", icon: "📋", badge: stats.pending },
-              { key: "notifications", label: "Notifications", icon: "✉️", badge: notifications.length },
+              { key: "dashboard", label: "Dashboard", icon: "ðŸ‘¤" },
+              { key: "find", label: "Find Experts", icon: "ðŸ”" },
+              { key: "history", label: "My Requests", icon: "ðŸ“‹", badge: stats.pending },
+              { key: "notifications", label: "Notifications", icon: "âœ‰ï¸", badge: notifications.length },
             ].map((item) => (
               <button
                 key={item.key}
@@ -347,7 +348,7 @@ const Dashboard = () => {
               Your Dashboard
             </h2>
             <p className="text-gray-500 mb-6">
-              Welcome back 👋 Manage your requests & explore services
+              Welcome back ðŸ‘‹ Manage your requests & explore services
             </p>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -359,7 +360,7 @@ const Dashboard = () => {
                   <div>
                     <label className="text-xs text-gray-400">Name</label>
                     <p className="text-gray-800 font-medium mt-1 border-b pb-1">
-                      {user?.name || "—"}
+                      {user?.name || "â€”"}
                     </p>
                   </div>
                   <div>
@@ -371,7 +372,7 @@ const Dashboard = () => {
                   <div className="col-span-2">
                     <label className="text-xs text-gray-400">Email</label>
                     <p className="text-gray-800 font-medium mt-1 border-b pb-1">
-                      {user?.email || "—"}
+                      {user?.email || "â€”"}
                     </p>
                   </div>
                 </div>
@@ -408,19 +409,19 @@ const Dashboard = () => {
                     onClick={() => setActiveTab("find")}
                     className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl font-semibold text-sm"
                   >
-                    🔍 Find an Expert
+                    ðŸ” Find an Expert
                   </button>
                   <button
                     onClick={() => setActiveTab("history")}
                     className="w-full bg-white border border-gray-200 text-gray-700 py-3 rounded-xl font-semibold text-sm hover:bg-gray-50"
                   >
-                    📋 View My Requests
+                    ðŸ“‹ View My Requests
                   </button>
                   <button
                     onClick={() => setActiveTab("notifications")}
                     className="w-full bg-white border border-gray-200 text-gray-700 py-3 rounded-xl font-semibold text-sm hover:bg-gray-50"
                   >
-                    ✉️ View Notifications
+                    âœ‰ï¸ View Notifications
                   </button>
                 </div>
               </div>
@@ -483,7 +484,7 @@ const Dashboard = () => {
             {/* ===== MAP ===== */}
             <div className="bg-white rounded-2xl shadow p-4 mb-6">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-700">📍 Your Location & Nearby Experts</h3>
+                <h3 className="font-bold text-gray-700">ðŸ“ Your Location & Nearby Experts</h3>
                 <button
                   onClick={useMyLocation}
                   className="bg-blue-600 text-white text-xs px-4 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -495,19 +496,19 @@ const Dashboard = () => {
               {/* LEGEND */}
               <div className="flex gap-4 mb-3">
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  🔵 You
+                  ðŸ”µ You
                 </span>
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  🔴 Electrician
+                  ðŸ”´ Electrician
                 </span>
                 <span className="text-xs text-gray-500 flex items-center gap-1">
-                  🔴 Plumber
+                  ðŸ”´ Plumber
                 </span>
               </div>
 
               {coords && (
                 <p className="text-xs text-green-600 mb-2">
-                  ✅ Your location: {location}
+                  âœ… Your location: {location}
                 </p>
               )}
 
@@ -525,13 +526,13 @@ const Dashboard = () => {
                     <Marker position={[coords.lat, coords.lng]} icon={customerIcon}>
                       <Popup>
                         <div className="text-center">
-                          <p className="font-bold text-blue-600">📍 You are here</p>
+                          <p className="font-bold text-blue-600">ðŸ“ You are here</p>
                         </div>
                       </Popup>
                     </Marker>
                   )}
 
-                  {/* PROVIDER PINS - RED ✅ */}
+                  {/* PROVIDER PINS - RED âœ… */}
                   {filteredProviders.map((p) => {
                     const pc = providerCoords[p._id];
                     if (!pc) return null;
@@ -545,10 +546,10 @@ const Dashboard = () => {
                           <div className="text-center min-w-[140px]">
                             <p className="font-bold text-gray-800">{p.name}</p>
                             <p className="text-xs text-gray-500 capitalize">{p.service}</p>
-                            <p className="text-xs text-yellow-500 mt-1">⭐ {p.rating || "0"}</p>
+                            <p className="text-xs text-yellow-500 mt-1">â­ {p.rating || "0"}</p>
                             <p className="text-xs text-gray-400">Rs. {p.price || "0"}</p>
                             <p className={`text-xs font-semibold mt-1 ${p.isAvailable ? "text-green-600" : "text-red-500"}`}>
-                              {p.isAvailable ? "✅ Available" : "❌ Unavailable"}
+                              {p.isAvailable ? "âœ… Available" : "âŒ Unavailable"}
                             </p>
                           </div>
                         </Popup>
@@ -575,17 +576,17 @@ const Dashboard = () => {
                     <h3 className="font-bold text-gray-800 text-lg">{p.name}</h3>
                     <p className="text-gray-500 text-sm capitalize">{p.service}</p>
                     {p.location && (
-                      <p className="text-gray-400 text-xs mt-1">📍 {p.location}</p>
+                      <p className="text-gray-400 text-xs mt-1">ðŸ“ {p.location}</p>
                     )}
                     <div className="flex items-center gap-1 mt-1">
-                      <span className="text-yellow-500 text-sm">⭐</span>
+                      <span className="text-yellow-500 text-sm">â­</span>
                       <span className="text-gray-600 text-sm">{p.rating || "0"}</span>
                       <span className="text-gray-400 text-xs ml-auto">
                         Rs. {p.price || "0"}
                       </span>
                     </div>
                     <div className={`mt-2 text-xs font-medium ${p.isAvailable ? "text-green-600" : "text-red-500"}`}>
-                      {p.isAvailable ? "✅ Available" : "❌ Unavailable"}
+                      {p.isAvailable ? "âœ… Available" : "âŒ Unavailable"}
                     </div>
                     <button
                       onClick={() => handleRequest(p._id)}
@@ -631,13 +632,13 @@ const Dashboard = () => {
                           {b.service}
                         </h3>
                         <p className="text-gray-500 text-sm">
-                          Provider: {b.providerId?.name || "—"}
+                          Provider: {b.providerId?.name || "â€”"}
                         </p>
                         {b.location && (
-                          <p className="text-gray-400 text-xs mt-1">📍 {b.location}</p>
+                          <p className="text-gray-400 text-xs mt-1">ðŸ“ {b.location}</p>
                         )}
                         <p className="text-gray-400 text-xs mt-1">
-                          🕐 {new Date(b.createdAt).toLocaleString()}
+                          ðŸ• {new Date(b.createdAt).toLocaleString()}
                         </p>
                       </div>
                       <span className={`text-xs px-3 py-1 rounded-full font-medium ${statusColor(b.status)}`}>
@@ -682,13 +683,13 @@ const Dashboard = () => {
                         onClick={() => openChat(b)}
                         className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl text-sm transition"
                       >
-                        💬 Message Provider
+                        ðŸ’¬ Message Provider
                       </button>
                     </div>
 
                     {b.status === "completed" && !b.feedback && (
                       <div className="mt-4 border-t pt-4">
-                        <p className="text-sm font-medium text-gray-700 mb-2">⭐ Leave Feedback</p>
+                        <p className="text-sm font-medium text-gray-700 mb-2">â­ Leave Feedback</p>
                         <div className="flex gap-2 mb-2">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <button
@@ -696,7 +697,7 @@ const Dashboard = () => {
                               onClick={() => setRatingMap(prev => ({ ...prev, [b._id]: star }))}
                               className={`text-xl ${ratingMap[b._id] >= star ? "text-yellow-400" : "text-gray-300"}`}
                             >
-                              ★
+                              â˜…
                             </button>
                           ))}
                         </div>
@@ -721,7 +722,7 @@ const Dashboard = () => {
                     {b.feedback && (
                       <div className="mt-3 bg-green-50 p-3 rounded-xl">
                         <p className="text-xs text-green-600 font-medium">
-                          ✅ Feedback submitted — Rating: {b.rating}/5
+                          âœ… Feedback submitted â€” Rating: {b.rating}/5
                         </p>
                         <p className="text-xs text-gray-500 mt-1">{b.feedback}</p>
                       </div>
@@ -770,3 +771,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
