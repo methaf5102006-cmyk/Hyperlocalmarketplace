@@ -3,7 +3,7 @@ const ServiceProvider = require("../models/ServiceProvider");
 const jwt = require("jsonwebtoken");
 
 // ✅ ADD THIS (IMPORTANT)
-const sendEmail = require("../Utils/SendEmail");
+const sendEmail = require("../utils/sendEmail");
 
 // ================= REGISTER =================
 exports.register = async (req, res) => {
