@@ -1,9 +1,7 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
 import {
-import { BASE_URL } from "../config";
   Mail,
   Lock,
   User,
@@ -11,20 +9,17 @@ import { BASE_URL } from "../config";
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
-
+import { BASE_URL } from "../config";
 const Register = () => {
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     role: "customer",
   });
-
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
   // ================= HANDLE CHANGE =================
   const handleChange = (e) => {
     setForm({
@@ -32,59 +27,46 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   // ================= REGISTER =================
   const handleRegister = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setMessage("");
-
     console.log("FORM DATA:", form);
-
     try {
       const res = await axios.post(
         `${BASE_URL}/api/auth/register`,
         form
       );
-
       setMessage(
         res.data.message || "Account created successfully"
       );
-
-      // âœ… CHANGED: redirect to verify-otp page with email
+      // ✅ CHANGED: redirect to verify-otp page with email
       setTimeout(() => {
         navigate("/verify-otp", {
           state: { email: form.email },
         });
       }, 1500);
-
     } catch (err) {
       console.log("REGISTER ERROR:", err.response?.data || err.message);
-
       if (err.response) {
-        setMessage(err.response.data.message || "Server Error âŒ");
+        setMessage(err.response.data.message || "Server Error ❌");
       } else if (err.request) {
-        setMessage("Cannot connect to backend server âŒ");
+        setMessage("Cannot connect to backend server ❌");
       } else {
-        setMessage(err.message || "Something went wrong âŒ");
+        setMessage(err.message || "Something went wrong ❌");
       }
     }
-
     setLoading(false);
   };
-
   return (
     <div className="min-h-screen bg-[#0f172a] flex items-center justify-center relative overflow-hidden px-4">
-
       {/* BACKGROUND GLOW */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 blur-[120px] rounded-full"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 blur-[120px] rounded-full"></div>
-
       {/* REGISTER CARD */}
       <div className="relative z-10 w-full max-w-md">
         <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8">
-
           {/* HEADER */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -93,10 +75,8 @@ const Register = () => {
             <h1 className="text-4xl font-black text-white">Create Account</h1>
             <p className="text-gray-300 mt-2">Join SkillLink marketplace today</p>
           </div>
-
           {/* FORM */}
           <form onSubmit={handleRegister} className="space-y-5">
-
             {/* NAME */}
             <div>
               <label className="text-sm text-gray-300 block mb-2">Full Name</label>
@@ -113,7 +93,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             {/* EMAIL */}
             <div>
               <label className="text-sm text-gray-300 block mb-2">Email Address</label>
@@ -130,7 +109,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             {/* PASSWORD */}
             <div>
               <label className="text-sm text-gray-300 block mb-2">Password</label>
@@ -147,7 +125,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             {/* ROLE */}
             <div>
               <label className="text-sm text-gray-300 block mb-2">Select Role</label>
@@ -166,7 +143,6 @@ const Register = () => {
                 </select>
               </div>
             </div>
-
             {/* BUTTON */}
             <button
               type="submit"
@@ -176,16 +152,13 @@ const Register = () => {
               {loading ? "Creating Account..." : "Sign Up"}
               {!loading && <ArrowRight size={18} />}
             </button>
-
           </form>
-
           {/* MESSAGE */}
           {message && (
             <p className="mt-5 text-center text-sm font-medium text-yellow-300">
               {message}
             </p>
           )}
-
           {/* LOGIN */}
           <div className="mt-6 text-center">
             <p className="text-gray-300">Already have an account?</p>
@@ -193,12 +166,9 @@ const Register = () => {
               Login Here
             </Link>
           </div>
-
         </div>
       </div>
     </div>
   );
 };
-
 export default Register;
-
