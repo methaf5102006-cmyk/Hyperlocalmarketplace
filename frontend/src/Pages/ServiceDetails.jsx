@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import services from "../data/services";
+import services from "../data/Services";
 
 // Leaflet imports
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
