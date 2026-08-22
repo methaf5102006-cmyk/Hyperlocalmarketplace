@@ -78,7 +78,7 @@ const Navbar = () => {
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex items-center gap-3">
 
-          {/* LOGIN, REGISTER, ADMIN — only show when NOT logged in */}
+          {/* LOGIN, REGISTER — only show when NOT logged in */}
           {!user && (
             <>
               {/* LOGIN */}
@@ -103,14 +103,6 @@ const Navbar = () => {
                 <span className="hidden sm:block">
                   Sign Up
                 </span>
-              </Link>
-
-              {/* ADMIN */}
-              <Link
-                to="/admin-login"
-                className="hidden lg:block bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-xl font-medium transition"
-              >
-                Admin
               </Link>
             </>
           )}
