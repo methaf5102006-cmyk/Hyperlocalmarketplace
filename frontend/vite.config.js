@@ -4,5 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/Hyperlocalmarketplace/'
-})
+  // eslint-disable-next-line no-undef
+  base: process.env.VERCEL ? '/' : '/Hyperlocalmarketplace/',
+})  
